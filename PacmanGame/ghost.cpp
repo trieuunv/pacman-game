@@ -107,24 +107,23 @@ void Ghost::die() {
     direction = 1;
     dead = true;
     death_timer = 180;
-    checkPossibleMovement();
 }
 
-// FIXED: Check wall properly - only walls (0) are blocked for ghosts
 // Ghosts can go through ghost house (2) when respawning
 bool Ghost::checkWall(int i, int j) {
-    // Out of bounds check
     if (i < 0 || i >= 31 || j < 0 || j >= 28) {
         return true;
     }
 
-    // Only wall (0) is blocked for ghosts
-    // Ghost house (2), pellets (1), eaten (-1), and items (3-6) are walkable
     if (board[i][j] == 0)
         return true;
+
+    if (isDead() && board[i][j] == 2) {
+        return false;
+    }
+
     return false;
 }
-// Ghost.cpp - Hàm Ghost::checkPossibleMovement()
 
 void Ghost::checkPossibleMovement() {
     std::vector<int> valid_directions;
